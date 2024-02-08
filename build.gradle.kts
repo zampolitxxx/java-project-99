@@ -5,7 +5,18 @@ plugins {
     id("io.freefair.lombok") version "8.4"
     id("org.springframework.boot") version "3.2.2"
     id("io.spring.dependency-management") version "1.1.4"
+    //for deploy
+    id("com.github.johnrengelman.shadow") version "7.1.0"
 }
+
+//Jar {
+//    manifest {
+//        attributes (
+//                'Main-Class': 'hexlet.code.app.AppApplication'
+//        )
+//    }
+//}
+
 group = "hexlet.code"
 version = "0.0.1-SNAPSHOT"
 
@@ -49,5 +60,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("hexlet.code.App")
+    mainClass.set("hexlet.code.app.AppApplication")
 }
