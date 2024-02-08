@@ -9,15 +9,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.0"
 }
 
-//Jar {
-//    manifest {
-//        attributes (
-//                'Main-Class': 'hexlet.code.app.AppApplication'
-//        )
-//    }
-//}
-
-group = "hexlet.code"
+//group = "hexlet.code"
 version = "0.0.1-SNAPSHOT"
 
 repositories {
