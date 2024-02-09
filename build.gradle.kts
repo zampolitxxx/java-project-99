@@ -1,6 +1,7 @@
 plugins {
     application
     java
+    id("checkstyle")
     id("jacoco")
     id("io.freefair.lombok") version "8.4"
     id("org.springframework.boot") version "3.2.2"
