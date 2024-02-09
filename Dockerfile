@@ -1,24 +1,13 @@
 FROM eclipse-temurin:20-jdk
 
-ARG GRADLE_VERSION=8.3
-
-RUN apt-get update && apt-get install -yq unzip
-
-RUN wget -q https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
-    && unzip gradle-${GRADLE_VERSION}-bin.zip \
-    && rm gradle-${GRADLE_VERSION}-bin.zip
-
-ENV GRADLE_HOME=/opt/gradle
-
-RUN mv gradle-${GRADLE_VERSION} ${GRADLE_HOME}
-
-ENV PATH=$PATH:$GRADLE_HOME/bin
-
 WORKDIR /app
 
-COPY /app .
+COPY /. .
 
-RUN gradle installDist
-RUN gradle clean shadowJar
+RUN ./gradlew --no-daemon dependencies
 
-CMD java -jar build/libs/app-1.0-SNAPSHOT.jar
+RUN ./gradlew --no-daemon build
+
+ENV JAVA_OPTS "-Xmx512M -Xms512M"
+
+CMD java -Dspring.profiles.active=prod -jar build/libs/app-0.0.1-SNAPSHOT.jar
