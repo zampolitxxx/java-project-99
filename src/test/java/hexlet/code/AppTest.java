@@ -3,8 +3,8 @@
  */
 package hexlet.code;
 
-import hexlet.code.app.AppApplication;
-import org.junit.jupiter.api.Test;
+//import hexlet.code.app.AppApplication;
+//import org.junit.jupiter.api.Test;
 
 class AppTest {
 

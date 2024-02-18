@@ -1,8 +1,8 @@
 plugins {
     application
     java
-    id("checkstyle")
-    id("jacoco")
+    checkstyle
+    jacoco
     id("io.freefair.lombok") version "8.4"
     id("org.springframework.boot") version "3.2.2"
     id("io.spring.dependency-management") version "1.1.4"
@@ -54,4 +54,20 @@ java {
 application {
     // Define the main class for the application.
     mainClass.set("hexlet.code.app.AppApplication")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required = true
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+    }
 }
