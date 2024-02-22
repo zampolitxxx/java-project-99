@@ -3,6 +3,9 @@ on:
   - push
   - pull_request
 
+env:
+  SPRING_PROFILES_ACTIVE: development
+
 jobs:
   build:
     runs-on: ubuntu-latest

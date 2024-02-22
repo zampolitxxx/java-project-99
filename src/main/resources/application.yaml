@@ -1,3 +1,13 @@
-user:
-  full-name: userName
-  age: 34
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    root: WARN
+    org:
+      springframework:
+        web: WARN
+
