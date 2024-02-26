@@ -3,3 +3,6 @@
 .idea
 # Ignore Gradle build output directory
 build
+#certs
+private.pem
+public.pem
