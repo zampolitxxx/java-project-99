@@ -29,7 +29,7 @@ import java.util.Collection;
 @Table(name = "users")
 @Getter
 @Setter
-public class User implements UserDetails, BaseEntity{
+public class User implements UserDetails, BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ToString.Include
