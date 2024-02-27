@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -37,17 +38,15 @@ public class SecurityConfig {
             HttpSecurity http,
             HandlerMappingIntrospector introspector) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/index.html", "/", "/assets/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .anyRequest().authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer((rs) -> rs.jwt((jwt) -> jwt.decoder(jwtDecoder)))
-                .httpBasic(Customizer.withDefaults())
+                .anonymous(AbstractHttpConfigurer::disable)         // AnonymousAuthenticationFilter
+                .csrf(AbstractHttpConfigurer::disable)              // CsrfFilter
+                .sessionManagement(AbstractHttpConfigurer::disable) // DisableEncodeUrlFilter, SessionManagementFilter
+                .exceptionHandling(AbstractHttpConfigurer::disable) // ExceptionTranslationFilter
+                .headers(AbstractHttpConfigurer::disable)           // HeaderWriterFilter
+                .logout(AbstractHttpConfigurer::disable)            // LogoutFilter
+                .requestCache(AbstractHttpConfigurer::disable)      // RequestCacheAwareFilter
+                .servletApi(AbstractHttpConfigurer::disable)        // SecurityContextHolderAwareRequestFilter
+                .securityContext(AbstractHttpConfigurer::disable)   // SecurityContextPersistenceFilter
                 .build();
     }
 
