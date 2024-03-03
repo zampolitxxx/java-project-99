@@ -1,22 +1,71 @@
 package hexlet.code.app.service;
 
+import hexlet.code.app.dto.UserCreateDTO;
+import hexlet.code.app.dto.UserUpdateDTO;
+import hexlet.code.app.exception.ResourceNotFoundException;
+import hexlet.code.app.mapper.UserMapper;
 import hexlet.code.app.repository.UserRepository;
+import hexlet.code.app.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService implements UserDetailsManager {
     private static final String NOT_FOUND_MESSAGE = "User not found";
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(NOT_FOUND_MESSAGE));
+    }
+
+    public UserDTO create(UserCreateDTO data) {
+        var user = userMapper.map(data);
+        userRepository.save(user);
+        return userMapper.map(user);
+    }
+
+    public List<UserDTO> getAll() {
+        var users = userRepository.findAll()
+                .stream()
+                .map(userMapper::map)
+                .toList();
+        return users;
+    }
+
+    public Long countAll() {
+        return userRepository.count();
+    }
+
+    public UserDTO findById(Long id) {
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE));
+        return userMapper.map(user);
+    }
+
+    public UserDTO update(Long id, UserUpdateDTO userData) {
+        var currentUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE));
+
+        userMapper.update(userData, currentUser);
+        userRepository.save(currentUser);
+        UserDTO userDTO = userMapper.map(currentUser);
+        return userDTO;
+    }
+
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 
     @Override

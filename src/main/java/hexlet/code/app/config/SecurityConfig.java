@@ -15,6 +15,10 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import jakarta.servlet.DispatcherType;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 @EnableWebSecurity
@@ -34,16 +38,28 @@ public class SecurityConfig {
             HttpSecurity http,
             HandlerMappingIntrospector introspector) throws Exception {
         return http
-                .anonymous(AbstractHttpConfigurer::disable)         // AnonymousAuthenticationFilter
-                .csrf(AbstractHttpConfigurer::disable)              // CsrfFilter
-                .sessionManagement(AbstractHttpConfigurer::disable) // DisableEncodeUrlFilter, SessionManagementFilter
-                .exceptionHandling(AbstractHttpConfigurer::disable) // ExceptionTranslationFilter
-                .headers(AbstractHttpConfigurer::disable)           // HeaderWriterFilter
-                .logout(AbstractHttpConfigurer::disable)            // LogoutFilter
-                .requestCache(AbstractHttpConfigurer::disable)      // RequestCacheAwareFilter
-                .servletApi(AbstractHttpConfigurer::disable)        // SecurityContextHolderAwareRequestFilter
-                .securityContext(AbstractHttpConfigurer::disable)   // SecurityContextPersistenceFilter
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
+                        .requestMatchers("/index.html", "/", "/assets/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2ResourceServer((rs) -> rs.jwt((jwt) -> jwt.decoder(jwtDecoder)))
+                .httpBasic(Customizer.withDefaults())
                 .build();
+
+
+//                .anonymous(AbstractHttpConfigurer::disable)         // AnonymousAuthenticationFilter
+//                .csrf(AbstractHttpConfigurer::disable)              // CsrfFilter
+//                .sessionManagement(AbstractHttpConfigurer::disable) // DisableEncodeUrlFilter, SessionManagementFilter
+//                .exceptionHandling(AbstractHttpConfigurer::disable) // ExceptionTranslationFilter
+//                .headers(AbstractHttpConfigurer::disable)           // HeaderWriterFilter
+//                .logout(AbstractHttpConfigurer::disable)            // LogoutFilter
+//                .requestCache(AbstractHttpConfigurer::disable)      // RequestCacheAwareFilter
+//                .servletApi(AbstractHttpConfigurer::disable)        // SecurityContextHolderAwareRequestFilter
+//                .securityContext(AbstractHttpConfigurer::disable)   // SecurityContextPersistenceFilter
+//                .build();
     }
 
     @Bean

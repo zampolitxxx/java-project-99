@@ -5,8 +5,8 @@ spring:
       ddl-auto: update
 
 logging:
-#  level:
-#    root: WARN
+  level:
+    root: DEBUG
     org:
       springframework:
         web: WARN
