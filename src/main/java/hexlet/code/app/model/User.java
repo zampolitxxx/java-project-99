@@ -1,8 +1,11 @@
 package hexlet.code.app.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GenerationType;
@@ -24,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -52,13 +56,15 @@ public class User implements UserDetails, BaseEntity {
     @NotBlank
     private String password;
 
-//    @JsonFormat(pattern="yyyy-MM-dd")
     @CreatedDate
     private LocalDate createdAt;
 
-//    @JsonFormat(pattern="yyyy-MM-dd")
     @LastModifiedDate
     private LocalDate updatedAt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private List<Task> tasks = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
