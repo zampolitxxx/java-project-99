@@ -25,10 +25,11 @@ public class TaskStatusService {
     }
 
     public List<TaskStatusDTO> getAll() {
-        return taskStatusRepository.findAll()
-                .stream()
+        var a = taskStatusRepository.findAll();
+        var b = a.stream()
                 .map(taskStatusMapper::map)
                 .toList();
+        return b;
     }
 
     public TaskStatusDTO findById(Long id) {
