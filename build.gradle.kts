@@ -43,6 +43,9 @@ dependencies {
     implementation("org.springframework.security:spring-security-test")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
+    //nine step
+    testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.2")
+
 }
 
 testing {

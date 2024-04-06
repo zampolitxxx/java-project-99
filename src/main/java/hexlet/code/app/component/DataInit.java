@@ -14,7 +14,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -66,15 +65,11 @@ public class DataInit implements ApplicationRunner {
             taskStatuses.forEach(taskStatusRepository::save);
         }
 
-        if (labelRepository.count() == 0) {
-            var labels = List.of("feature", "bug")
-                    .stream()
-                    .map(item -> {
-                        var label = new Label();
-                        label.setName(item);
-                        return label;
-                    });
-            labels.forEach(labelRepository::save);
-        }
+        var labelBug = new Label();
+        labelBug.setName("bug");
+        labelRepository.save(labelBug);
+        var labelFeature = new Label();
+        labelFeature.setName("feature");
+        labelRepository.save(labelFeature);
     }
 }
