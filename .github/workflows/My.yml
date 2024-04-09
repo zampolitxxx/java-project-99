@@ -16,6 +16,8 @@ jobs:
         with:
           java-version: '20'
           distribution: 'temurin'
+      - name: Generate keys
+        run: make generate_rsa
       - name: Build with gradle
         uses: gradle/gradle-build-action@v3.1.0
         with:
