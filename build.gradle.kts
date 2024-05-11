@@ -84,6 +84,9 @@ sentry {
     // This enables source context, allowing you to see your source
     // code as part of your stack traces in Sentry.
     includeSourceContext = true
+    autoInstallation {
+        sentryVersion.set("7.5.0")
+    }
 
     org = "zampolitxxxgmailcom"
     projectName = "java-spring-boot"
