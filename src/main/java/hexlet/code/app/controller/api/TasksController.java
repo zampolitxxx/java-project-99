@@ -30,7 +30,7 @@ public class TasksController {
     @Autowired
     private TaskService taskService;
 
-    @GetMapping(value = "/tasks")
+    @GetMapping(value = "")
     public ResponseEntity<List<TaskDTO>> index(TaskParamsDTO params) {
         var tasks = taskService.getAll(params);
         return ResponseEntity.ok()
