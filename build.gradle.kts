@@ -47,8 +47,8 @@ dependencies {
     //nine step
     testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.2")
     //ten step
-    implementation("io.sentry:sentry-spring-boot-starter:7.5.0")
-    implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.5.0")
+    implementation("io.sentry:sentry-spring-boot-starter:7.6.0")
+    implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.6.0")
 
 }
 
@@ -79,14 +79,16 @@ buildscript {
     }
 }
 
+//sentry {
+//    autoInstallation {
+//        sentryVersion.set("7.0.0")
+//    }
+//}
 sentry {
     // Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
     // This enables source context, allowing you to see your source
     // code as part of your stack traces in Sentry.
     includeSourceContext = true
-    autoInstallation {
-        sentryVersion.set("7.5.0")
-    }
 
     org = "zampolitxxxgmailcom"
     projectName = "java-spring-boot"
