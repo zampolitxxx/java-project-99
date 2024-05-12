@@ -89,10 +89,21 @@ sentry {
     // This enables source context, allowing you to see your source
     // code as part of your stack traces in Sentry.
     includeSourceContext = true
-
     org = "zampolitxxxgmailcom"
     projectName = "java-spring-boot"
     authToken = System.getenv("SENTRY_AUTH_TOKEN")
+}
+
+//if (System.getenv("APP_ENV").equals("prod")) {
+//    sentry {
+//        includeSourceContext = true
+//        authToken = System.getenv("SENTRY_AUTH_TOKEN")
+//
+//    }
+//}
+
+tasks.sentryBundleSourcesJava {
+    enabled = System.getenv("SENTRY_AUTH_TOKEN") != null
 }
 
 tasks.withType<Test> {
