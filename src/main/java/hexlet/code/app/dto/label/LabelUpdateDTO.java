@@ -4,11 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.openapitools.jackson.nullable.JsonNullable;
 
-@Getter
 @Setter
+@Getter
 public class LabelUpdateDTO {
-    @NotBlank
     @Size(min = 3, max = 1000)
-    private String name;
+    private JsonNullable<String> name;
 }

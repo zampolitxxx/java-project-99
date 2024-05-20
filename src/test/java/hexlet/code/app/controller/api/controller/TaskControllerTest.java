@@ -2,6 +2,7 @@ package hexlet.code.app.controller.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.app.dto.task.TaskCreateDTO;
+import hexlet.code.app.dto.task.TaskUpdateDTO;
 import hexlet.code.app.mapper.TaskMapper;
 import hexlet.code.app.model.Label;
 import hexlet.code.app.model.Task;
@@ -16,6 +17,7 @@ import org.instancio.Instancio;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +33,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -167,6 +171,41 @@ public class TaskControllerTest {
         assertThat(testTask).isNotNull();
         assertThat(testTask.getName()).isEqualTo(dto.getName());
         assertThat(testTask.getDescription()).isEqualTo(dto.getDescription());
+    }
+
+    @Test
+    public void testPartialUpdate() throws Exception {
+        taskRepository.save(testTask);
+        var dto = new TaskUpdateDTO();
+        dto.setName(JsonNullable.of("updated_name"));
+        dto.setDescription(JsonNullable.of("updated description"));
+
+        var request = put("/api/tasks/{id}", testTask.getId())
+                .with(token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(dto));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        var task = taskRepository.findByName("updated_name").get();
+
+        assertThat(task.getName()).isEqualTo("updated_name");
+        assertThat(task.getDescription()).isEqualTo("updated description");
+        assertThat(task.getAssignee().getUsername()).isEqualTo(testTask.getAssignee().getUsername());
+        assertThat(task.getLabels().size()).isEqualTo(testTask.getLabels().size());
+        assertThat(task.getTaskStatus().getSlug()).isEqualTo(testTask.getTaskStatus().getSlug());
+    }
+
+    @Test
+    public void testDestroy() throws Exception {
+        taskRepository.save(testTask);
+        var request = delete("/api/tasks/{id}", testTask.getId())
+                .with(token);
+        mockMvc.perform(request)
+                .andExpect(status().isNoContent());
+
+        assertThat(taskRepository.existsById(testTask.getId())).isEqualTo(false);
     }
 
     @AfterEach

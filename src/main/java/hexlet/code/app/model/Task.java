@@ -54,6 +54,6 @@ public class Task implements BaseEntity {
     @CreatedDate
     private LocalDate createdAt;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER) //Eager need for test
     private Set<Label> labels = new HashSet<>();
 }

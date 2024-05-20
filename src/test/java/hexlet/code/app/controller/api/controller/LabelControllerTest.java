@@ -2,6 +2,7 @@ package hexlet.code.app.controller.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.app.dto.label.LabelCreateDTO;
+import hexlet.code.app.dto.label.LabelUpdateDTO;
 import hexlet.code.app.model.Label;
 import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.controller.api.util.ModelGenerator;
@@ -9,6 +10,7 @@ import org.instancio.Instancio;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +24,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -95,6 +99,25 @@ public class LabelControllerTest {
 
         assertThat(testLabel).isNotNull();
         assertThat(testLabel.getName()).isEqualTo(dto.getName());
+    }
+
+    @Test
+    public void testPartialUpdate() throws Exception {
+        var dto = new LabelUpdateDTO();
+        dto.setName(JsonNullable.of("start"));
+
+        var request = put("/api/labels/{id}", testLabel.getId())
+                .with(token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(dto));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        var label = labelRepository.findByName("start").get();
+
+        assertThat(label.getName()).isEqualTo("start");
+        assertThat(label.getTasks().size()).isEqualTo(testLabel.getTasks().size());
     }
 
 

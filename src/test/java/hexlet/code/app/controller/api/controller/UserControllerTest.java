@@ -2,6 +2,7 @@ package hexlet.code.app.controller.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.app.dto.UserCreateDTO;
+import hexlet.code.app.dto.UserUpdateDTO;
 import hexlet.code.app.mapper.UserMapper;
 import hexlet.code.app.controller.api.UsersController;
 import hexlet.code.app.model.User;
@@ -10,6 +11,7 @@ import hexlet.code.app.controller.api.util.ModelGenerator;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +25,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -104,5 +108,39 @@ public class UserControllerTest {
         assertThat(user.getLastName()).isEqualTo(dto.getLastName());
         assertThat(user.getUsername()).isEqualTo(dto.getEmail());
     }
+
+    @Test
+    public void testPartialUpdate() throws Exception {
+        var dto = new UserUpdateDTO();
+        dto.setFirstName(JsonNullable.of("python"));
+        dto.setLastName(JsonNullable.of("gradle"));
+        dto.setEmail(JsonNullable.of("python@python.com"));
+        dto.setPassword(JsonNullable.of("12345678"));
+
+        var request = put("/api/users/{id}", testUser.getId())
+                .with(token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(dto));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        var user = userRepository.findByEmail("python@python.com").get();
+
+        assertThat(user.getFirstName()).isEqualTo("python");
+        assertThat(user.getLastName()).isEqualTo("gradle");
+        assertThat(user.getUsername()).isEqualTo("python@python.com");
+    }
+
+    @Test
+    public void testDestroy() throws Exception {
+        var request = delete("/api/users/{id}", testUser.getId())
+                .with(token);
+        mockMvc.perform(request)
+                .andExpect(status().isNoContent());
+
+        assertThat(userRepository.existsById(testUser.getId())).isEqualTo(false);
+    }
+
 }
 

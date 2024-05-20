@@ -4,6 +4,7 @@ import hexlet.code.app.dto.TaskStatusDTO;
 import hexlet.code.app.dto.TaskStatusCreateDTO;
 import hexlet.code.app.dto.TaskStatusUpdateDTO;
 import hexlet.code.app.exception.ResourceNotFoundException;
+import hexlet.code.app.exception.ParentEntityExistsException;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,13 @@ public class TaskStatusService {
     }
 
     public void delete(Long id) {
-        taskStatusRepository.deleteById(id);
+        var taskStatus = taskStatusRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("TaskStatus with id " + id + " not found"));
+        if (taskStatus.getTasks().isEmpty()) {
+            taskStatusRepository.deleteById(id);
+        } else {
+            throw new ParentEntityExistsException("TaskStatus with id " + id
+                    + " is assigned to existing Task and can't be destroyed");
+        }
     }
 }

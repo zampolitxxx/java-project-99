@@ -34,7 +34,7 @@ public class TaskStatusController {
                 .body(taskStatus);
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public TaskStatusDTO show(@PathVariable Long id) {
         return taskStatusService.findById(id);
     }
