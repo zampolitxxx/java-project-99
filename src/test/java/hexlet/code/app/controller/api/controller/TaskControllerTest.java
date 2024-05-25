@@ -173,7 +173,11 @@ public class TaskControllerTest {
         assertThat(testTask.getDescription()).isEqualTo(dto.getDescription());
         assertThat(testTask.getAssignee().getId()).isEqualTo(dto.getAssigneeId());
         assertThat(testTask.getTaskStatus().getSlug()).isEqualTo(dto.getStatus());
-        assertThat(testTask.getLabels().stream().findFirst().get().getId()).isEqualTo(dto.getLabelIds().stream().findFirst().get());
+        assertThat(testTask.getLabels()
+                .stream()
+                .findFirst()
+                .get()
+                .getId()).isEqualTo(dto.getLabelIds().stream().findFirst().get());
     }
 
     @Test
