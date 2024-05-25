@@ -48,7 +48,5 @@ public class Label implements BaseEntity {
     @CreatedDate
     private LocalDate createdAt;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "labels", cascade = CascadeType.MERGE) //EAGER need for testUpdate
-    private Set<Task> tasks = new HashSet<>();
 
 }
