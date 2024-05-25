@@ -60,7 +60,7 @@ public class LabelControllerTest {
     }
 
     @Test
-    public void testIndex() throws Exception {
+    public void testGetAll() throws Exception {
         var result = mockMvc.perform(get("/api/labels").with(token))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -70,7 +70,7 @@ public class LabelControllerTest {
     }
 
     @Test
-    public void testShow() throws Exception {
+    public void testGetById() throws Exception {
         var request = get("/api/labels/{id}", testLabel.getId()).with(token);
         var result = mockMvc.perform(request)
                 .andExpect(status().isOk())

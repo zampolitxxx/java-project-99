@@ -91,7 +91,7 @@ public class TaskControllerTest {
     }
 
     @Test
-    public void testIndex() throws Exception {
+    public void testGetAll() throws Exception {
         taskRepository.save(testTask);
         var result = mockMvc.perform(get("/api/tasks").with(token))
                 .andExpect(status().isOk())
@@ -102,7 +102,7 @@ public class TaskControllerTest {
     }
 
     @Test
-    public void testIndexWithTitleContains() throws Exception {
+    public void testGetAllWithTitleContains() throws Exception {
         taskRepository.save(testTask);
         String cont = taskRepository.findByName(testTask.getName()).get().getName();
         var result = mockMvc.perform(get("/api/tasks?titleCont=cont").with(token))
@@ -117,7 +117,7 @@ public class TaskControllerTest {
     }
 
     @Test
-    public void testIndexWithAssignee() throws Exception {
+    public void testGetAllWithAssignee() throws Exception {
         taskRepository.save(testTask);
         Long id = taskRepository.findByName(testTask.getName()).get().getAssignee().getId();
         var path = "/api/tasks?assigneeId=" + id;
@@ -133,7 +133,7 @@ public class TaskControllerTest {
     }
 
     @Test
-    public void testShow() throws Exception {
+    public void testGetById() throws Exception {
         taskRepository.save(testTask);
         var request = get("/api/tasks/{id}", testTask.getId()).with(token);
         var result = mockMvc.perform(request)
