@@ -1,5 +1,6 @@
 package hexlet.code.app.controller.api.controller;
 
+import net.datafaker.Faker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.app.dto.UserCreateDTO;
 import hexlet.code.app.dto.UserUpdateDTO;
@@ -18,6 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Map;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,6 +55,9 @@ public class UserControllerTest {
 
     @Autowired
     private UsersController usersController;
+
+    @Autowired
+    private Faker faker;
 
     @BeforeEach
     public void setUp() {
@@ -140,6 +146,29 @@ public class UserControllerTest {
                 .andExpect(status().isNoContent());
 
         assertThat(userRepository.existsById(testUser.getId())).isEqualTo(false);
+    }
+
+    @Test
+    public void testUpdateWithoutAuth() throws Exception {
+
+        var newEmail = faker.internet().emailAddress();
+        var newPassword = faker.internet().emailAddress();
+
+        var request = put("/api/users/{id}", testUser.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(Map.of("password", newPassword, "email", newEmail)));
+
+        mockMvc.perform(request)
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void testDeleteWithoutAuth() throws Exception {
+        var request = delete("/api/users/{id}", testUser.getId())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isUnauthorized());
     }
 
 }
