@@ -27,7 +27,7 @@ public class TaskStatusController {
     private TaskStatusService taskStatusService;
 
     @GetMapping
-    public ResponseEntity<List<TaskStatusDTO>> index() {
+    public ResponseEntity<List<TaskStatusDTO>> getAll() {
         var taskStatus = taskStatusService.getAll();
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(taskStatusService.countAll()))
@@ -35,7 +35,7 @@ public class TaskStatusController {
     }
 
     @GetMapping("/{id}")
-    public TaskStatusDTO show(@PathVariable Long id) {
+    public TaskStatusDTO getById(@PathVariable Long id) {
         return taskStatusService.findById(id);
     }
 

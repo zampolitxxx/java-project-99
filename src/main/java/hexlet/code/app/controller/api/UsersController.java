@@ -35,14 +35,8 @@ public class UsersController {
     @Autowired
     private UserUtils userUtils;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO create(@Valid @RequestBody UserCreateDTO data) {
-        return userService.create(data);
-    }
-
     @GetMapping
-    public ResponseEntity<List<UserDTO>> index() {
+    public ResponseEntity<List<UserDTO>> getAll() {
         var users = userService.getAll();
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(userService.countAll()))
@@ -50,8 +44,14 @@ public class UsersController {
     }
 
     @GetMapping("/{id}")
-    public UserDTO show(@PathVariable Long id) {
+    public UserDTO getById(@PathVariable Long id) {
         return userService.findById(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDTO create(@Valid @RequestBody UserCreateDTO data) {
+        return userService.create(data);
     }
 
     @PutMapping("/{id}")

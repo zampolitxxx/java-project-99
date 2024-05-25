@@ -29,7 +29,7 @@ public class LabelController {
     private LabelService labelService;
 
     @GetMapping
-    public ResponseEntity<List<LabelDTO>> index() {
+    public ResponseEntity<List<LabelDTO>> getAll() {
         var labels = labelService.getAll();
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(labelService.countAll()))
@@ -37,7 +37,7 @@ public class LabelController {
     }
 
     @GetMapping("/{id}")
-    public LabelDTO show(@PathVariable Long id) {
+    public LabelDTO getById(@PathVariable Long id) {
         return labelService.findById(id);
     }
 
