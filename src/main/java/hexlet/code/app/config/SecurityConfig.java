@@ -49,18 +49,6 @@ public class SecurityConfig {
                 .oauth2ResourceServer((rs) -> rs.jwt((jwt) -> jwt.decoder(jwtDecoder)))
                 .httpBasic(Customizer.withDefaults())
                 .build();
-
-
-//                .anonymous(AbstractHttpConfigurer::disable)         // AnonymousAuthenticationFilter
-//                .csrf(AbstractHttpConfigurer::disable)              // CsrfFilter
-//                .sessionManagement(AbstractHttpConfigurer::disable) // DisableEncodeUrlFilter, SessionManagementFilter
-//                .exceptionHandling(AbstractHttpConfigurer::disable) // ExceptionTranslationFilter
-//                .headers(AbstractHttpConfigurer::disable)           // HeaderWriterFilter
-//                .logout(AbstractHttpConfigurer::disable)            // LogoutFilter
-//                .requestCache(AbstractHttpConfigurer::disable)      // RequestCacheAwareFilter
-//                .servletApi(AbstractHttpConfigurer::disable)        // SecurityContextHolderAwareRequestFilter
-//                .securityContext(AbstractHttpConfigurer::disable)   // SecurityContextPersistenceFilter
-//                .build();
     }
 
     @Bean
