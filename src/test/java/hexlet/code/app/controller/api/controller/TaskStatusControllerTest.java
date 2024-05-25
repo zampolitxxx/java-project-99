@@ -57,9 +57,15 @@ public class TaskStatusControllerTest {
 
     @Test
     public void testIndex() throws Exception {
+        taskStatusRepository.save(testTaskStatus);
         var result = mockMvc.perform(get("/api/task_statuses").with(token))
                 .andExpect(status().isOk())
                 .andReturn();
+
+        var totalCount = result.getResponse().getHeader("X-Total-Count");
+
+        assertThat(totalCount).isNotNull();
+        assertThat(Long.valueOf(totalCount)).isEqualTo(taskStatusRepository.count());
 
         var body = result.getResponse().getContentAsString();
         assertThatJson(body).isArray();
