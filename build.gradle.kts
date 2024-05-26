@@ -23,6 +23,7 @@ repositories {
 
 dependencies {
     runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.postgresql:postgresql:42.7.1")
     implementation("com.google.guava:guava:31.1-jre")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-validation")
