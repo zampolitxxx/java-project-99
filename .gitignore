@@ -6,3 +6,4 @@ build
 #certs
 #private.pem
 #public.pem
+node_modules
