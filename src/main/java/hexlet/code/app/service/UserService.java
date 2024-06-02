@@ -2,7 +2,6 @@ package hexlet.code.app.service;
 
 import hexlet.code.app.dto.user.UserCreateDTO;
 import hexlet.code.app.dto.user.UserUpdateDTO;
-import hexlet.code.app.exception.ResourceNotFoundException;
 import hexlet.code.app.mapper.UserMapper;
 import hexlet.code.app.repository.UserRepository;
 import hexlet.code.app.dto.user.UserDTO;
@@ -50,13 +49,13 @@ public class UserService implements UserDetailsManager {
 
     public UserDTO findById(Long id) {
         var user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE));
+                .orElseThrow();
         return userMapper.map(user);
     }
 
     public UserDTO update(Long id, UserUpdateDTO userData) {
         var currentUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE));
+                .orElseThrow();
 
         userMapper.update(userData, currentUser);
         userRepository.save(currentUser);

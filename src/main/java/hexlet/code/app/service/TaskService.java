@@ -4,13 +4,10 @@ import hexlet.code.app.dto.task.TaskParamsDTO;
 import hexlet.code.app.dto.task.TaskCreateDTO;
 import hexlet.code.app.dto.task.TaskDTO;
 import hexlet.code.app.dto.task.TaskUpdateDTO;
-import hexlet.code.app.exception.ResourceNotFoundException;
 import hexlet.code.app.mapper.TaskMapper;
-//import hexlet.code.app.model.TaskStatus;
 import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.specification.TaskSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +32,7 @@ public class TaskService {
 
     public TaskDTO findTask(Long id) {
         var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task Not Found: " + id));
+                .orElseThrow();
         return taskMapper.map(task);
     }
 
@@ -47,7 +44,7 @@ public class TaskService {
 
     public TaskDTO updateTask(TaskUpdateDTO taskData, Long id) {
         var task = taskRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
+                .orElseThrow();
         taskMapper.update(taskData, task);
         taskRepository.save(task);
         return taskMapper.map(task);

@@ -3,7 +3,6 @@ package hexlet.code.app.service;
 import hexlet.code.app.dto.taskStatus.TaskStatusDTO;
 import hexlet.code.app.dto.taskStatus.TaskStatusCreateDTO;
 import hexlet.code.app.dto.taskStatus.TaskStatusUpdateDTO;
-import hexlet.code.app.exception.ResourceNotFoundException;
 import hexlet.code.app.exception.ParentEntityExistsException;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.mapper.TaskStatusMapper;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Service
 public class TaskStatusService {
-    private static final String NOT_FOUND_MESSAGE = "Status not found";
 
     @Autowired
     private TaskStatusMapper taskStatusMapper;
@@ -35,7 +33,7 @@ public class TaskStatusService {
 
     public TaskStatusDTO findById(Long id) {
         var taskStatus = taskStatusRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE));
+                .orElseThrow();
         return taskStatusMapper.map(taskStatus);
     }
 
@@ -47,7 +45,7 @@ public class TaskStatusService {
 
     public TaskStatusDTO update(Long id, TaskStatusUpdateDTO data) {
         var taskStatus = taskStatusRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE));
+                .orElseThrow();
         taskStatusMapper.update(data, taskStatus);
         taskStatusRepository.save(taskStatus);
         return taskStatusMapper.map(taskStatus);
@@ -55,7 +53,7 @@ public class TaskStatusService {
 
     public void delete(Long id) {
         var taskStatus = taskStatusRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("TaskStatus with id " + id + " not found"));
+                .orElseThrow();
         if (taskStatus.getTasks().isEmpty()) {
             taskStatusRepository.deleteById(id);
         } else {
