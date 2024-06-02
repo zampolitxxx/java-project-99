@@ -4,12 +4,12 @@ import hexlet.code.app.dto.user.UserCreateDTO;
 import hexlet.code.app.dto.user.UserDTO;
 import hexlet.code.app.dto.user.UserUpdateDTO;
 import hexlet.code.app.service.UserService;
-import hexlet.code.app.exception.ResourceForbiddenException;
 import hexlet.code.app.util.UserUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,7 +59,7 @@ public class UsersController {
         var currentUser = userUtils.getCurrentUser();
 
         if (!currentUser.getId().equals(id)) {
-            throw new ResourceForbiddenException();
+            throw new AccessDeniedException("");
         }
         return userService.update(id, userData);
     }
@@ -70,7 +70,7 @@ public class UsersController {
         var currentUser = userUtils.getCurrentUser();
 
         if (!currentUser.getId().equals(id)) {
-            throw new ResourceForbiddenException();
+            throw new AccessDeniedException("");
         }
         userService.delete(id);
 
