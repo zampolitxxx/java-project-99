@@ -51,10 +51,6 @@ public class TaskStatusService {
     }
 
     public void delete(Long id) {
-        var taskStatus = taskStatusRepository.findById(id)
-                .orElseThrow();
-        if (taskStatus.getTasks().isEmpty()) {
-            taskStatusRepository.deleteById(id);
-        }
+        taskStatusRepository.deleteById(id);
     }
 }
