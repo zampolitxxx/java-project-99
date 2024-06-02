@@ -3,7 +3,6 @@ package hexlet.code.app.service;
 import hexlet.code.app.dto.taskStatus.TaskStatusDTO;
 import hexlet.code.app.dto.taskStatus.TaskStatusCreateDTO;
 import hexlet.code.app.dto.taskStatus.TaskStatusUpdateDTO;
-import hexlet.code.app.exception.ParentEntityExistsException;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.mapper.TaskStatusMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +55,6 @@ public class TaskStatusService {
                 .orElseThrow();
         if (taskStatus.getTasks().isEmpty()) {
             taskStatusRepository.deleteById(id);
-        } else {
-            throw new ParentEntityExistsException("TaskStatus with id " + id
-                    + " is assigned to existing Task and can't be destroyed");
         }
     }
 }
