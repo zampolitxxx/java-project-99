@@ -72,7 +72,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("hexlet.code.app.AppApplication")
+    mainClass.set("hexlet.code.AppApplication")
 }
 buildscript {
     repositories {
