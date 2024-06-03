@@ -11,7 +11,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.0"
 }
 
-//group = "hexlet.code"
+group = "hexlet.code"
 version = "0.0.1-SNAPSHOT"
 
 repositories {
