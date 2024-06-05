@@ -65,11 +65,13 @@ public class DataInit implements ApplicationRunner {
             taskStatuses.forEach(taskStatusRepository::save);
         }
 
-        var labelBug = new Label();
-        labelBug.setName("bug");
-        labelRepository.save(labelBug);
-        var labelFeature = new Label();
-        labelFeature.setName("feature");
-        labelRepository.save(labelFeature);
+        if (labelRepository.count() == 0) {
+            var labelBug = new Label();
+            labelBug.setName("bug");
+            labelRepository.save(labelBug);
+            var labelFeature = new Label();
+            labelFeature.setName("feature");
+            labelRepository.save(labelFeature);
+        }
     }
 }
