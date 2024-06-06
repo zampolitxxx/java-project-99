@@ -21,6 +21,13 @@ import java.util.Map;
 public class DataInit implements ApplicationRunner {
     private static final String USER_EMAIL = "hexlet@example.com";
     private static final String USER_PASSWORD = "qwerty";
+    private static final Map<String, String> TASK_STATUSES = Map.of(
+            "Draft", "draft",
+            "ToReview", "to_review",
+            "ToBeFixed", "to_be_fixed",
+            "ToPublish", "to_publish",
+            "Published", "published"
+    );
 
     @Autowired
     private final UserRepository userRepository;
@@ -48,13 +55,7 @@ public class DataInit implements ApplicationRunner {
         }
 
         if (taskStatusRepository.count() == 0) {
-            var taskStatuses = Map.of(
-                    "Draft", "draft",
-                    "ToReview", "to_review",
-                    "ToBeFixed", "to_be_fixed",
-                    "ToPublish", "to_publish",
-                    "Published", "published"
-            ).entrySet()
+            var taskStatuses = TASK_STATUSES.entrySet()
                     .stream()
                     .map(entry -> {
                         var taskStatusData = new TaskStatusCreateDTO();
