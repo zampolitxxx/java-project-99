@@ -44,9 +44,4 @@ public abstract class UserMapper {
             dto.setPassword(JsonNullable.of(passwordEncoder.encode(password.get())));
         }
     }
-
-    public void encryptPassword(User model) {
-        var password = model.getPassword();
-        model.setPassword(passwordEncoder.encode(password));
-    }
 }
