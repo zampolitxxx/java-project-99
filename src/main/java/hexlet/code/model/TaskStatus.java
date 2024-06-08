@@ -22,7 +22,6 @@ import java.time.LocalDate;
 @Setter
 @EntityListeners(AuditingEntityListener.class)
 @ToString(onlyExplicitlyIncluded = true)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "task_statuses")
 public class TaskStatus implements BaseEntity {
     @Id
