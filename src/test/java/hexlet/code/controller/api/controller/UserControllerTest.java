@@ -2,7 +2,6 @@ package hexlet.code.controller.api.controller;
 
 import hexlet.code.dto.user.UserCreateDTO;
 import hexlet.code.dto.user.UserUpdateDTO;
-import net.datafaker.Faker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.mapper.UserMapper;
 import hexlet.code.controller.api.UsersController;
@@ -55,9 +54,6 @@ public class UserControllerTest {
 
     @Autowired
     private UsersController usersController;
-
-    @Autowired
-    private Faker faker;
 
     @BeforeEach
     public void setUp() {
@@ -151,8 +147,8 @@ public class UserControllerTest {
     @Test
     public void testUpdateWithoutAuth() throws Exception {
 
-        var newEmail = faker.internet().emailAddress();
-        var newPassword = faker.internet().emailAddress();
+        var newEmail = testUser.getEmail();
+        var newPassword = testUser.getPassword();
 
         var request = put("/api/users/{id}", testUser.getId())
                 .contentType(MediaType.APPLICATION_JSON)
