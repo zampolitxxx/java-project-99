@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -29,13 +27,13 @@ public class TaskService {
     public List<TaskDTO> getAll(TaskParamsDTO params) {
         var spec = specBuilder.build(params);
         var tasks = taskRepository.findAll(spec);
-        return tasks.stream().map(taskMapper::toEntity).toList();
+        return tasks.stream().map(taskMapper::map).toList();
     }
 
     public TaskDTO findTask(Long id) {
         var task = taskRepository.findById(id)
                 .orElseThrow();
-        return taskMapper.toEntity(task);
+        return taskMapper.map(task);
     }
 
     public TaskDTO createTask(TaskCreateDTO taskData) {
