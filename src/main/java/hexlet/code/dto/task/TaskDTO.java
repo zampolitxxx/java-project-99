@@ -12,20 +12,20 @@ import java.util.Set;
 public class TaskDTO {
     private Long id;
 
-    private Long index;
-
-    private LocalDate createdAt;
-
-    @JsonProperty("assignee_id")
-    private Long assigneeId;
-
     @JsonProperty("title")
     private String name;
 
     @JsonProperty("content")
     private String description;
 
+    private Long index;
+
     private String status;
+
+    @JsonProperty("assignee_id")
+    private Long assigneeId;
+
+    private LocalDate createdAt;
 
     @JsonProperty("taskLabelIds")
     private Set<Long> labelIds;
