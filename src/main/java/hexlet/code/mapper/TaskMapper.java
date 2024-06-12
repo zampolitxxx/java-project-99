@@ -6,6 +6,7 @@ import hexlet.code.dto.task.TaskUpdateDTO;
 import hexlet.code.model.Label;
 import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
+import hexlet.code.model.User;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import org.mapstruct.Mapper;
@@ -44,7 +45,7 @@ public abstract class TaskMapper {
     public abstract Task map(TaskCreateDTO model);
 
 
-            @Mapping(source = "assignee.id", target = "assigneeId")
+            @Mapping(source = "assignee", target = "assigneeId", qualifiedByName = "assigneeIdToUsers")
             @Mapping(target = "createdAt", ignore = true)
             @Mapping(target = "id", ignore = true)
             @Mapping(source = "taskStatus.slug", target = "status")
@@ -70,5 +71,10 @@ public abstract class TaskMapper {
     @Named("idsToLabels")
     public Set<Label> idsToLabels(Set<Long> labelIds) {
         return labelIds == null ? new HashSet<>() : labelRepository.findAllByIdIn(labelIds);
+    }
+
+    @Named("assigneeIdToUsers")
+    public User toEntity(Long assigneeId) {
+        return new User().setId(assigneeId);
     }
 }
