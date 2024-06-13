@@ -45,7 +45,7 @@ public abstract class TaskMapper {
     public abstract Task map(TaskCreateDTO model);
 
 
-            @Mapping(source = "assignee", target = "assigneeId", qualifiedByName = "userToAssigneeIds")
+            @Mapping(source = "assignee.id", target = "assigneeId")
             @Mapping(target = "createdAt", ignore = true)
             @Mapping(target = "id", ignore = true)
             @Mapping(source = "taskStatus.slug", target = "status")
@@ -75,11 +75,9 @@ public abstract class TaskMapper {
 
     @Named("assigneeIdToUsers")
     public User assigneeIdToUsers(Long assigneeId) {
+        if (assigneeId == null) {
+            return null;
+        }
         return new User().setId(assigneeId);
-    }
-
-    @Named("userToAssigneeIds")
-    public Long userToAssigneeIds(User user) {
-        return user.getId();
     }
 }
