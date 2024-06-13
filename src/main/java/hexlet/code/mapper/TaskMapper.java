@@ -37,7 +37,7 @@ public abstract class TaskMapper {
     @Autowired
     private LabelRepository labelRepository;
 
-            @Mapping(source = "assigneeId", target = "assignee.id")
+            @Mapping(source = "assigneeId", target = "assignee", qualifiedByName = "assigneeIdToUsers")
             @Mapping(target = "createdAt", ignore = true)
             @Mapping(target = "id", ignore = true)
             @Mapping(source = "status", target = "taskStatus", qualifiedByName = "statusToTaskStatus")
@@ -45,7 +45,7 @@ public abstract class TaskMapper {
     public abstract Task map(TaskCreateDTO model);
 
 
-            @Mapping(source = "assignee", target = "assigneeId", qualifiedByName = "assigneeIdToUsers")
+            @Mapping(source = "assignee", target = "assigneeId", qualifiedByName = "userToAssigneeIds")
             @Mapping(target = "createdAt", ignore = true)
             @Mapping(target = "id", ignore = true)
             @Mapping(source = "taskStatus.slug", target = "status")
@@ -74,7 +74,12 @@ public abstract class TaskMapper {
     }
 
     @Named("assigneeIdToUsers")
-    public User toEntity(Long assigneeId) {
+    public User assigneeIdToUsers(Long assigneeId) {
         return new User().setId(assigneeId);
+    }
+
+    @Named("userToAssigneeIds")
+    public Long userToAssigneeIds(User user) {
+        return user.getId();
     }
 }
